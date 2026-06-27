@@ -1,40 +1,21 @@
 variable "security_groups" {
-  description = "Create Resource : aws_security_group"
+  description = "Create Resource : aws_security_group, aws_security_group_rule"
   type = list(object({
-    tf_key      = string
-    name        = string
-    description = optional(string, "Managed by Terraform")
-    vpc_id      = string
-    tags        = optional(map(string), {})
-
-    ingress_rules = optional(list(object({
-      description      = optional(string, null)
-      from_port        = number
-      to_port          = number
-      protocol         = string
-      cidr_blocks      = optional(list(string), [])
-      ipv6_cidr_blocks = optional(list(string), [])
-      security_groups  = optional(list(string), [])
-      self             = optional(bool, false)
-    })), [])
-
-    egress_rules = optional(list(object({
-      description      = optional(string, null)
-      from_port        = number
-      to_port          = number
-      protocol         = string
-      cidr_blocks      = optional(list(string), ["0.0.0.0/0"])
-      ipv6_cidr_blocks = optional(list(string), ["::/0"])
-      security_groups  = optional(list(string), [])
-      self             = optional(bool, false)
-    })), [
-      {
-        from_port   = 0
-        to_port     = 0
-        protocol    = "-1"
-        cidr_blocks = ["0.0.0.0/0"]
-      }
-    ])
+    tf_key      = optional(string, null)
+    sg_name     = optional(string, null)
+    description = optional(string, "Security Group")
+    vpc_id      = optional(string, null)
+    tags        = optional(map(string), null)
+    ## Security Group Rule
+    rules = optional(list(object({
+      ## for_each Key : join("_", [sg_name, type, protocol, port_range, source])
+      ## Example: sg-62726f6479_egress_tcp_8000_8000_pl-6469726b
+      type        = optional(string, "ingress")
+      protocol    = optional(string, "tcp")
+      port_range  = optional(string, null)
+      source      = optional(string, null)
+      description = optional(string, null)
+    })), null)
   }))
   default = []
 }

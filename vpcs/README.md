@@ -1,6 +1,9 @@
 # Terraform AWS Module
 - Terraform Repo URL : https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc
 
+## Version
+- Plugin Version: 6.33.0
+  
 ## Example Template
 ```HCL
 module "vpc_subnet" {

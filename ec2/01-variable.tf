@@ -1,0 +1,40 @@
+variable "ec2s" {
+  description = "Create Resource : aws_instance, aws_eip, aws_ebs_volume, aws_volume_attachment"
+  type = list(object({
+    tf_key               = optional(string, null)
+    ec2_name             = optional(string, null)
+    ami                  = optional(string, null)
+    instance_type        = optional(string, "t3.micro")
+    subnet_id            = optional(string, null)
+    security_group_ids   = optional(list(string), null)
+    iam_instance_profile = optional(string, null)
+    user_data            = optional(string, null)
+    key_name             = optional(string, null)
+    public_ip            = optional(bool, false)
+    private_ip           = optional(string, null)
+    tags                 = optional(map(string), null)
+    root_block_device = optional(object({
+      volume_type           = optional(string, "gp3")
+      volume_size           = optional(number, 8)
+      iops                  = optional(number, null)
+      throughput            = optional(number, null)
+      encrypted             = optional(bool, false)
+      kms_key_id            = optional(string, null)
+      delete_on_termination = optional(bool, true)
+      tags                  = optional(map(string), null)
+    }), null)
+    ebs_volumes = optional(list(object({
+      tf_key                = optional(string, null)
+      device_name           = optional(string, "/dev/xvdf")
+      volume_type           = optional(string, "gp3")
+      volume_size           = optional(number, 20)
+      iops                  = optional(number, null)
+      throughput            = optional(number, null)
+      encrypted             = optional(bool, false)
+      kms_key_id            = optional(string, null)
+      delete_on_termination = optional(bool, true)
+      tags                  = optional(map(string), null)
+    })), null)
+  }))
+  default = []
+}
